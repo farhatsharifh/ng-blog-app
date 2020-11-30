@@ -1,0 +1,13 @@
+<div class="top-spacer"></div>
+<!-- property binding -->
+<!-- template variables -->
+<textarea name="post" cols="30" rows="5" [value]="newPost" #inputtext></textarea>
+<br>
+<!-- event binding -->
+<button (click)="onAddPost(inputtext)">Save Post</button>
+<!-- string interpolation -->
+<p>{{ newPost }}</p>
+<hr>
+<!-- two way binding -->
+<textarea name="post" cols="30" rows="5" [(ngModel)]="enteredValue"></textarea>
+<p>{{ enteredValue }}</p>
