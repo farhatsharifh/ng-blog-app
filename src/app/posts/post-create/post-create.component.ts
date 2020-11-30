@@ -9,7 +9,7 @@ export class PostCreateComponent {
   newPost = 'NO content';
   enteredValue = '';
 
-  onAddPost(inputE: HTMLTextAreaElement) {
-    this.newPost = inputE.value;
+  onAddPost(inputEle: HTMLTextAreaElement) {
+    this.newPost = inputEle.value;
   }
 }

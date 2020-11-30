@@ -1,13 +1,12 @@
 <div class="top-spacer"></div>
-<!-- property binding -->
-<!-- template variables -->
-<textarea name="post" cols="30" rows="5" [value]="newPost" #inputtext></textarea>
-<br>
-<!-- event binding -->
-<button (click)="onAddPost(inputtext)">Save Post</button>
-<!-- string interpolation -->
-<p>{{ newPost }}</p>
-<hr>
-<!-- two way binding -->
-<textarea name="post" cols="30" rows="5" [(ngModel)]="enteredValue"></textarea>
+<mat-card>
+  <mat-form-field appearance="legacy">
+    <textarea matInput name="post" cols="30" rows="5" [(ngModel)]="enteredValue" #inputtext></textarea>
+  </mat-form-field>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onAddPost(inputtext)">Save Post</button>
+</mat-card>
+
 <p>{{ enteredValue }}</p>
