@@ -1,0 +1,16 @@
+.spacer {
+  flex: 1;
+}
+
+.header span {
+  margin: 0 16px;
+}
+
+.header #twitter-logo {
+  height: 40px;
+  margin: 0 16px;
+}
+
+.header #twitter-logo:hover {
+  opacity: 0.8;
+}
