@@ -1,12 +1,13 @@
 <div class="top-spacer"></div>
 <mat-card>
+  <mat-form-field>
+    <input matInput type="text" [(ngModel)]="enteredTitle">
+  </mat-form-field>
   <mat-form-field appearance="legacy">
-    <textarea matInput name="post" cols="30" rows="5" [(ngModel)]="enteredValue" #inputtext></textarea>
+    <textarea matInput name="post" cols="30" rows="5" [(ngModel)]="enteredContent"></textarea>
   </mat-form-field>
   <button
     mat-raised-button
     color="primary"
-    (click)="onAddPost(inputtext)">Save Post</button>
+    (click)="onAddPost()">Save Post</button>
 </mat-card>
-
-<p>{{ enteredValue }}</p>
