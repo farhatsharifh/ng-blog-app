@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 import { Post } from './post.model';
 
@@ -14,9 +15,18 @@ export class PostsService {
   ) {}
 
   getPosts(){
-    this.http.get<{message: string, posts: Post[]}>('http://localhost:3002/api/posts')
-      .subscribe((resData) => {
-        this.posts = resData.posts;
+    this.http.get<{message: string, posts: any}>('http://localhost:3002/api/posts')
+      .pipe(map((resData) => {
+        return resData.posts.map(post => {
+          return {
+            id: post._id,
+            title: post.title,
+            content: post.content
+          };
+        });
+      }))
+      .subscribe((postsData) => {
+        this.posts = postsData;
         this.postsUpdated.next([...this.posts]);
       });
   }
