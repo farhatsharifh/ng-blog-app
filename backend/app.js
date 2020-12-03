@@ -1,7 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
+const Post = require('./models/post');
 
 const app = express();
+
+// to connect to mongodb atlas
+// mongoose.connect("mongodb+srv://farhat:abc111@cluster0.swrsp.mongodb.net/ngblogdb?retryWrites=true&w=majority", { useNewUrlParser: true , useUnifiedTopology: true })
+mongoose.connect("mongodb://localhost:27017/ngblogdb", { useNewUrlParser: true , useUnifiedTopology: true })
+  .then(() => {
+    console.log('Connected to database!');
+  })
+  .catch((e) => {
+    console.log('Connecntion failed due to ', e);
+  });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -14,10 +27,13 @@ app.use((req, res, next) => {
 });
 
 app.post('/api/posts', (req, res, next) => {
-  const post = req.body;
-  console.log("creating new post as: ", post);
+  const post = new Post({
+    title: req.body.title,
+    content: req.body.content
+  });
+  post.save();
   res.status(201).json({
-    message: 'New post added successfully'
+    message: 'New post added successfully!'
   });
 });
 
