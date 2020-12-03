@@ -1,7 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
+const Post = require('./models/post');
 
 const app = express();
+
+// to connect to mongodb atlas
+// mongoose.connect("mongodb+srv://farhat:abc111@cluster0.swrsp.mongodb.net/ngblogdb?retryWrites=true&w=majority", { useNewUrlParser: true , useUnifiedTopology: true })
+mongoose.connect("mongodb://localhost:27017/ngblogdb", { useNewUrlParser: true , useUnifiedTopology: true })
+  .then(() => {
+    console.log('Connected to database!');
+  })
+  .catch((e) => {
+    console.log('Connecntion failed due to ', e);
+  });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -13,31 +26,36 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post('/api/posts', (req, res, next) => {
-  const post = req.body;
-  console.log("creating new post as: ", post);
-  res.status(201).json({
-    message: 'New post added successfully'
+app.post("/api/posts", (req, res, next) => {
+  const post = new Post({
+    title: req.body.title,
+    content: req.body.content
   });
+  post.save()
+    .then(newPost => {
+      res.status(201).json({
+        message: 'New post added successfully!',
+        postId: newPost._id
+      });
+    });
 });
 
-app.get('/api/posts', (req, res, next) => {
-  const posts = [
-    {
-      id: 'hiah8324ye',
-      title: 'My first post',
-      content: 'using Express framework for building the backend'
-    },
-    {
-      id: 'hiah8324ye',
-      title: 'Another post',
-      content: 'Enhancing the backend'
-    }
-  ];
-  return res.status(200).json({
-    message: 'Posts fetched successfully',
-    posts: posts
-  });
+app.get("/api/posts", (req, res, next) => {
+  Post.find()
+    .then(documents => {
+      res.status(200).json({
+        message: 'Posts fetched successfully',
+        posts: documents
+      });
+    });
+});
+
+app.delete("/api/posts/:id", (req, res, next) => {
+  Post.deleteOne({ _id: req.params.id })
+    .then((result) => {
+      console.log('Delete result ', result);
+      res.status(200).json({message: 'Post deleted successfully!'});
+    });
 });
 
 module.exports = app;
