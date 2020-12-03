@@ -38,22 +38,13 @@ app.post('/api/posts', (req, res, next) => {
 });
 
 app.get('/api/posts', (req, res, next) => {
-  const posts = [
-    {
-      id: 'hiah8324ye',
-      title: 'My first post',
-      content: 'using Express framework for building the backend'
-    },
-    {
-      id: 'hiah8324ye',
-      title: 'Another post',
-      content: 'Enhancing the backend'
-    }
-  ];
-  return res.status(200).json({
-    message: 'Posts fetched successfully',
-    posts: posts
-  });
+  Post.find()
+    .then(documents => {
+      res.status(200).json({
+        message: 'Posts fetched successfully',
+        posts: documents
+      });
+    });
 });
 
 module.exports = app;
