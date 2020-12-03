@@ -15,7 +15,7 @@ export class PostsService {
   ) {}
 
   getPosts(){
-    this.http.get<{message: string, posts: any}>('http://localhost:3002/api/posts')
+    this.http.get<{message: string, posts: any}>("http://localhost:3002/api/posts")
       .pipe(map((resData) => {
         return resData.posts.map(post => {
           return {
@@ -37,10 +37,19 @@ export class PostsService {
 
   addPost(title: string, content: string) {
     const post: Post = { id: null, title: title, content: content };
-    this.http.post<{message: string}>('http://localhost:3002/api/posts', post)
+    this.http.post<{message: string}>("http://localhost:3002/api/posts", post)
       .subscribe((resData) => {
         console.log(resData.message);
         this.posts.push(post);
+        this.postsUpdated.next([...this.posts]);
+      });
+  }
+
+  deletePost(postId: string) {
+    this.http.delete("http://localhost:3002/api/posts/"+postId)
+      .subscribe(() => {
+        const postsAfterDel = this.posts.filter(post => post.id !== postId);
+        this.posts = postsAfterDel;
         this.postsUpdated.next([...this.posts]);
       });
   }
