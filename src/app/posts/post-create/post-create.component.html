@@ -8,7 +8,7 @@
         <mat-error *ngIf="form.get('title').invalid">Please Enter Post Title</mat-error>
     </mat-form-field>
     <button type="button" mat-stroked-button color="primary" (click)="imagePicker.click()">Select Image</button>
-    <input type="file" #imagePicker>
+    <input type="file" #imagePicker (change)="onImageSelected($event)">
     <mat-form-field appearance="legacy">
       <textarea matInput
         formControlName="content" rows="5" placeholder="Post Content"></textarea>
