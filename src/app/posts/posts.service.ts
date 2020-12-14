@@ -8,8 +8,8 @@ import { Post } from './post.model';
 
 @Injectable({providedIn: 'root'})
 export class PostsService {
-  // private backendUrl = "http://localhost:3002/api";
-  private backendUrl = "http://ng-blog-api.projects.farhatsharif.com/api";
+  private backendUrl = "http://localhost:3002/api";
+  // private backendUrl = "http://ng-blog-api.projects.farhatsharif.com/api";
   private posts: Post[] = [];
   private postsUpdated = new Subject<{posts: Post[], postsCount: number}>();
 
