@@ -10,7 +10,7 @@ const app = express();
 
 // to connect to mongodb atlas
 // mongoose.connect("mongodb+srv://farhat:abc111@cluster0.swrsp.mongodb.net/ngblogdb?retryWrites=true&w=majority", { useNewUrlParser: true , useUnifiedTopology: true })
-mongoose.connect("mongodb://localhost:27017/ngblogdb", { useNewUrlParser: true , useUnifiedTopology: true })
+mongoose.connect("mongodb://localhost:27017/ngblogdb", { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
   .then(() => {
     console.log('Connected to database!');
   })

@@ -8,8 +8,8 @@ import { Post } from './post.model';
 
 @Injectable({providedIn: 'root'})
 export class PostsService {
-  private backendUrl = "http://localhost:3002/api";
-  // private backendUrl = "http://ng-blog-api.projects.farhatsharif.com/api";
+  private backendUrl = "http://localhost:3002/api/posts";
+  // private backendUrl = "http://ng-blog-api.projects.farhatsharif.com/api/posts";
   private posts: Post[] = [];
   private postsUpdated = new Subject<{posts: Post[], postsCount: number}>();
 
@@ -20,7 +20,7 @@ export class PostsService {
 
   getPosts(postsPerPage: number, currentPage: number){
     const queryParams = `?pageSize=${postsPerPage}&currentPage=${currentPage}`;
-    this.http.get<{message: string, posts: any, maxPosts: number}>(this.backendUrl + "/posts" + queryParams)
+    this.http.get<{message: string, posts: any, maxPosts: number}>(this.backendUrl + queryParams)
       .pipe(map((resData) => {
         return {
         posts: resData.posts.map(post => {
@@ -48,7 +48,7 @@ export class PostsService {
 
   getPost(id: string){
     return this.http.get<{_id: string, title: string, content: string, imagePath: string}>(
-      this.backendUrl + "/posts/" + id
+      this.backendUrl + "/" + id
       );
   }
 
@@ -58,7 +58,7 @@ export class PostsService {
     postData.append("content", content);
     postData.append("image", image, title)
     this.http.post<{message: string, post: Post}>(
-      this.backendUrl + "/posts",
+      this.backendUrl,
       postData
       )
       .subscribe((resData) => {
@@ -82,12 +82,12 @@ export class PostsService {
         imagePath: image
       }
     }
-    this.http.put(this.backendUrl + "/posts/" + id, postData)
+    this.http.put(this.backendUrl + "/" + id, postData)
       .subscribe(response => {
         this.router.navigate(['/']);
       });
   }
   deletePost(postId: string) {
-    return this.http.delete(this.backendUrl + "/posts/" + postId);
+    return this.http.delete(this.backendUrl + "/" + postId);
   }
 }
