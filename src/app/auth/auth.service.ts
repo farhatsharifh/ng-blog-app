@@ -8,10 +8,15 @@ import { AuthData } from './auth-data.model';
 export class AuthService {
   private userBackendUrl = "http://localhost:3002/api/user";
   // private userBackendUrl = "http://ng-blog-api.projects.farhatsharif.com/api/user";
+  private token: string;
 
   constructor(
     private http: HttpClient
   ) { }
+
+  getToken() {
+    return this.token;
+  }
 
   createUser(email: string, password: string){
     const authData: AuthData = { email: email, password: password };
@@ -23,9 +28,10 @@ export class AuthService {
 
   login(email: string, password: string) {
     const authData: AuthData = { email: email, password: password };
-    this.http.post(this.userBackendUrl + "/login", authData)
+    this.http.post<{token: string}>(this.userBackendUrl + "/login", authData)
       .subscribe(response => {
-        console.log('login response: ', response);
+        const resToken = response.token;
+        this.token = resToken;
       });
   }
 
