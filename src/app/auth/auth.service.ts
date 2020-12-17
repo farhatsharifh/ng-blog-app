@@ -11,6 +11,7 @@ export class AuthService {
   private userBackendUrl = "http://localhost:3002/api/user";
   // private userBackendUrl = "http://ng-blog-api.projects.farhatsharif.com/api/user";
   private token: string;
+  private isAuthenticated = false;
   private authStatusListener = new Subject<boolean>();
 
   constructor(
@@ -21,7 +22,11 @@ export class AuthService {
     return this.token;
   }
 
-  getAuthStatusListener(){
+  getIsAuth() {
+    return this.isAuthenticated;
+  }
+
+  getAuthStatusListener() {
     return this.authStatusListener.asObservable();
   }
 
@@ -39,7 +44,10 @@ export class AuthService {
       .subscribe(response => {
         const resToken = response.token;
         this.token = resToken;
-        this.authStatusListener.next(true);
+        if(resToken) {
+          this.isAuthenticated = true;
+          this.authStatusListener.next(true);
+        }
       });
   }
 
