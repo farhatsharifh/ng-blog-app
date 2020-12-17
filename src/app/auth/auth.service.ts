@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Subject } from 'rxjs';
+
 import { AuthData } from './auth-data.model';
 
 @Injectable({
@@ -9,6 +11,7 @@ export class AuthService {
   private userBackendUrl = "http://localhost:3002/api/user";
   // private userBackendUrl = "http://ng-blog-api.projects.farhatsharif.com/api/user";
   private token: string;
+  private authStatusListener = new Subject<boolean>();
 
   constructor(
     private http: HttpClient
@@ -16,6 +19,10 @@ export class AuthService {
 
   getToken() {
     return this.token;
+  }
+
+  getAuthStatusListener(){
+    return this.authStatusListener.asObservable();
   }
 
   createUser(email: string, password: string){
@@ -32,6 +39,7 @@ export class AuthService {
       .subscribe(response => {
         const resToken = response.token;
         this.token = resToken;
+        this.authStatusListener.next(true);
       });
   }
 
