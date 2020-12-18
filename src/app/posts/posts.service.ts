@@ -8,8 +8,8 @@ import { Post } from './post.model';
 
 @Injectable({providedIn: 'root'})
 export class PostsService {
-  private backendUrl = "http://localhost:3002/api/posts";
-  // private backendUrl = "http://ng-blog-api.projects.farhatsharif.com/api/posts";
+  private postsBackendUrl = "http://localhost:3002/api/posts";
+  // private postsBackendUrl = "http://ng-blog-api.projects.farhatsharif.com/api/posts";
   private posts: Post[] = [];
   private postsUpdated = new Subject<{posts: Post[], postsCount: number}>();
 
@@ -20,7 +20,7 @@ export class PostsService {
 
   getPosts(postsPerPage: number, currentPage: number){
     const queryParams = `?pageSize=${postsPerPage}&currentPage=${currentPage}`;
-    this.http.get<{message: string, posts: any, maxPosts: number}>(this.backendUrl + queryParams)
+    this.http.get<{message: string, posts: any, maxPosts: number}>(this.postsBackendUrl + queryParams)
       .pipe(map((resData) => {
         return {
         posts: resData.posts.map(post => {
@@ -28,16 +28,17 @@ export class PostsService {
             id: post._id,
             title: post.title,
             content: post.content,
-            imagePath: post.imagePath
+            imagePath: post.imagePath,
+            creator: post.creator
           };
         }),
         maxPosts: resData.maxPosts};
       }))
-      .subscribe((postsData) => {
-        this.posts = postsData.posts;
+      .subscribe((transformedPostsData) => {
+        this.posts = transformedPostsData.posts;
         this.postsUpdated.next({
           posts: [...this.posts],
-          postsCount: postsData.maxPosts
+          postsCount: transformedPostsData.maxPosts
         });
       });
   }
@@ -47,8 +48,8 @@ export class PostsService {
   }
 
   getPost(id: string){
-    return this.http.get<{_id: string, title: string, content: string, imagePath: string}>(
-      this.backendUrl + "/" + id
+    return this.http.get<{_id: string, title: string, content: string, imagePath: string, creator: string}>(
+      this.postsBackendUrl + "/" + id
       );
   }
 
@@ -58,7 +59,7 @@ export class PostsService {
     postData.append("content", content);
     postData.append("image", image, title)
     this.http.post<{message: string, post: Post}>(
-      this.backendUrl,
+      this.postsBackendUrl,
       postData
       )
       .subscribe((resData) => {
@@ -79,15 +80,16 @@ export class PostsService {
         id: id,
         title: title,
         content: content,
-        imagePath: image
+        imagePath: image,
+        creator: null
       }
     }
-    this.http.put(this.backendUrl + "/" + id, postData)
+    this.http.put(this.postsBackendUrl + "/" + id, postData)
       .subscribe(response => {
         this.router.navigate(['/']);
       });
   }
   deletePost(postId: string) {
-    return this.http.delete(this.backendUrl + "/" + postId);
+    return this.http.delete(this.postsBackendUrl + "/" + postId);
   }
 }
