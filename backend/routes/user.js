@@ -16,13 +16,13 @@ router.post("/signup", (req, res, next) => {
       user.save()
         .then((result) => {
           res.status(201).json({
-            message: 'user created successfully',
+            message: 'User created successfully!',
             result: result
           });
         })
         .catch(err => {
           res.status(500).json({
-            error: err
+            message: "User already exists!"
           });
         });
     });
@@ -59,7 +59,7 @@ router.post("/login", (req, res, next) => {
     })
     .catch(err => {
       return res.status(401).json({
-        message: "Authentication failed"
+        message: "Invalid authentication credentials!"
       });
     });
 });

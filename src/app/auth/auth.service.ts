@@ -43,6 +43,8 @@ export class AuthService {
     this.http.post(this.userBackendUrl + "/signup", authData)
       .subscribe(response => {
         this.router.navigate(['/']);
+      }, error => {
+        this.authStatusListener.next(false);
       });
   }
 
@@ -63,6 +65,8 @@ export class AuthService {
           this.saveAuthData(this.token, expirationDate, this.userId);
           this.router.navigate(['/']);
         }
+      }, error => {
+        this.authStatusListener.next(false);
       });
   }
 
