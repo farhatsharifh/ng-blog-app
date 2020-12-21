@@ -3,14 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
 
+import { environment } from "../../environments/environment";
 import { AuthData } from './auth-data.model';
+
+const BACKENDURL = environment.apiUrl + "/user/";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private userBackendUrl = "http://localhost:3002/api/user";
-  // private userBackendUrl = "http://ng-blog-api.projects.farhatsharif.com/api/user";
   private token: string;
   private isAuthenticated = false;
   private authStatusListener = new Subject<boolean>();
@@ -40,7 +41,7 @@ export class AuthService {
 
   createUser(email: string, password: string){
     const authData: AuthData = { email: email, password: password };
-    this.http.post(this.userBackendUrl + "/signup", authData)
+    this.http.post(BACKENDURL + "signup", authData)
       .subscribe(response => {
         this.router.navigate(['/']);
       }, error => {
@@ -50,7 +51,7 @@ export class AuthService {
 
   login(email: string, password: string) {
     const authData: AuthData = { email: email, password: password };
-    this.http.post<{token: string, expiresIn: number, userId: string}>(this.userBackendUrl + "/login", authData)
+    this.http.post<{token: string, expiresIn: number, userId: string}>(BACKENDURL + "login", authData)
       .subscribe(response => {
         const resToken = response.token;
         this.token = resToken;
